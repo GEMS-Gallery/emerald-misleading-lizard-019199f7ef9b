@@ -3,8 +3,8 @@ import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@m
 
 interface NoteEditorProps {
   categories: string[];
-  onAddNote: (title: string, content: string, category: string | undefined) => void;
-  onUpdateNote: (id: bigint, title: string, content: string, category: string | undefined) => void;
+  onAddNote: (title: string, content: string, category: string | null) => void;
+  onUpdateNote: (id: bigint, title: string, content: string, category: string | null) => void;
   selectedNote: { id: bigint; title: string; content: string; category: string | null } | null;
 }
 
@@ -27,7 +27,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ categories, onAddNote, onUpdate
 
   const handleSubmit = () => {
     if (title.trim() && content.trim()) {
-      const categoryToSend = category === "" ? undefined : category;
+      const categoryToSend = category === "" ? null : category;
       if (selectedNote) {
         onUpdateNote(selectedNote.id, title, content, categoryToSend);
       } else {
