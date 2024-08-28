@@ -3,38 +3,39 @@ import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@m
 
 interface NoteEditorProps {
   categories: string[];
-  onAddNote: (title: string, content: string, category: string | null) => void;
-  onUpdateNote: (id: bigint, title: string, content: string, category: string | null) => void;
+  onAddNote: (title: string, content: string, category: string | undefined) => void;
+  onUpdateNote: (id: bigint, title: string, content: string, category: string | undefined) => void;
   selectedNote: { id: bigint; title: string; content: string; category: string | null } | null;
 }
 
 const NoteEditor: React.FC<NoteEditorProps> = ({ categories, onAddNote, onUpdateNote, selectedNote }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState<string | null>(null);
+  const [category, setCategory] = useState<string>('');
 
   useEffect(() => {
     if (selectedNote) {
       setTitle(selectedNote.title);
       setContent(selectedNote.content);
-      setCategory(selectedNote.category);
+      setCategory(selectedNote.category || '');
     } else {
       setTitle('');
       setContent('');
-      setCategory(null);
+      setCategory('');
     }
   }, [selectedNote]);
 
   const handleSubmit = () => {
     if (title.trim() && content.trim()) {
+      const categoryToSend = category === "" ? undefined : category;
       if (selectedNote) {
-        onUpdateNote(selectedNote.id, title, content, category);
+        onUpdateNote(selectedNote.id, title, content, categoryToSend);
       } else {
-        onAddNote(title, content, category);
+        onAddNote(title, content, categoryToSend);
       }
       setTitle('');
       setContent('');
-      setCategory(null);
+      setCategory('');
     }
   };
 
@@ -60,7 +61,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ categories, onAddNote, onUpdate
       <FormControl fullWidth margin="normal">
         <InputLabel>Category</InputLabel>
         <Select
-          value={category || ''}
+          value={category}
           onChange={(e) => setCategory(e.target.value as string)}
         >
           <MenuItem value="">None</MenuItem>

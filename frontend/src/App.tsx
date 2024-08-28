@@ -66,9 +66,9 @@ const App: React.FC = () => {
     }
   };
 
-  const handleAddNote = async (title: string, content: string, category: string | null) => {
+  const handleAddNote = async (title: string, content: string, category: string | undefined) => {
     try {
-      const result = await backend.addNote(title, content, category);
+      const result = await backend.addNote(title, content, category === "" ? null : category);
       if ('ok' in result) {
         fetchNotes();
       } else {
@@ -79,9 +79,9 @@ const App: React.FC = () => {
     }
   };
 
-  const handleUpdateNote = async (id: bigint, title: string, content: string, category: string | null) => {
+  const handleUpdateNote = async (id: bigint, title: string, content: string, category: string | undefined) => {
     try {
-      const result = await backend.updateNote(id, title, content, category);
+      const result = await backend.updateNote(id, title, content, category === "" ? null : category);
       if ('ok' in result) {
         fetchNotes();
       } else {

@@ -56,35 +56,15 @@ actor {
 
   // Note management
   public func addNote(title: Text, content: Text, category: ?Text) : async Result.Result<(), Text> {
-    switch (category) {
-      case null {
-        let newNote = {
-          id = nextNoteId;
-          title = title;
-          content = content;
-          category = null;
-        };
-        notes := Array.append<Note>(notes, [newNote]);
-        nextNoteId += 1;
-        #ok(())
-      };
-      case (?cat) {
-        switch (findCategory(cat)) {
-          case null { #err("Category not found") };
-          case (?_) {
-            let newNote = {
-              id = nextNoteId;
-              title = title;
-              content = content;
-              category = ?cat;
-            };
-            notes := Array.append<Note>(notes, [newNote]);
-            nextNoteId += 1;
-            #ok(())
-          };
-        }
-      };
-    }
+    let newNote = {
+      id = nextNoteId;
+      title = title;
+      content = content;
+      category = category;
+    };
+    notes := Array.append<Note>(notes, [newNote]);
+    nextNoteId += 1;
+    #ok(())
   };
 
   public func updateNote(id: Nat, title: Text, content: Text, category: ?Text) : async Result.Result<(), Text> {
